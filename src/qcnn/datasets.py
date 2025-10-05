@@ -22,8 +22,9 @@ def generate_line_dataset(num_images, width=4, height=2, min_l=2, max_l=-1):
     hor_array = np.zeros((horizontals, width*height))
     ver_array = np.zeros((verticals, width*height))
 
+    # generate all possible images
+    h, v = 0, 0
     for l in range(min_l, max_l + 1):
-        h, v = 0, 0
         for i in range(0, pixels):
             col = i % width
             row = i // width
@@ -31,22 +32,22 @@ def generate_line_dataset(num_images, width=4, height=2, min_l=2, max_l=-1):
                 hor_array[h][i : i+l] = np.pi / 2
                 h += 1
             if row + l <= height:
-                ver_array[v][i : i + width*l + 1: width] = np.pi / 2
+                ver_array[v][i : i + width*l : width] = np.pi / 2
                 v += 1
 
     for n in range(num_images):
         rng = algorithm_globals.random.integers(0, 2)
         if rng == 0:
             labels.append(-1)   
-            random_image = algorithm_globals.random.integers(0, 6)
+            random_image = algorithm_globals.random.integers(0, horizontals)
             images.append(np.array(hor_array[random_image]))
         elif rng == 1:
             labels.append(1)
-            random_image = algorithm_globals.random.integers(0, 4)
+            random_image = algorithm_globals.random.integers(0, verticals)
             images.append(np.array(ver_array[random_image]))
 
         # Create noise
-        for i in range(8):
+        for i in range(pixels):
             if images[-1][i] == 0:
                 images[-1][i] = algorithm_globals.random.uniform(0, np.pi / 4)
     return images, labels
