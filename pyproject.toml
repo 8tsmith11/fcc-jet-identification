@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qcnn"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["qiskit>=1.2", "qiskit-machine-learning>=0.7", "numpy", "matplotlib", "scikit-learn"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
