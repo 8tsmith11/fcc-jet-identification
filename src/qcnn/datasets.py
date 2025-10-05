@@ -22,27 +22,17 @@ def generate_line_dataset(num_images, width=4, height=2, min_l=2, max_l=-1):
     hor_array = np.zeros((horizontals, width*height))
     ver_array = np.zeros((verticals, width*height))
 
-    j = 0
-    for i in range(0, 7):
-        if i != 3:
-            hor_array[j][i] = np.pi / 2
-            hor_array[j][i + 1] = np.pi / 2
-            j += 1
-
     for l in range(min_l, max_l + 1):
-        j = 0
+        h, v = 0, 0
         for i in range(0, pixels):
             col = i % width
+            row = i // width
             if col + l <= width:
-                hor_array[j][i:i+l-1] = np.pi / 2
-                j == 1
-             
-
-    j = 0
-    for i in range(0, 4):
-        ver_array[j][i] = np.pi / 2
-        ver_array[j][i + 4] = np.pi / 2
-        j += 1
+                hor_array[h][i : i+l] = np.pi / 2
+                h += 1
+            if row + l <= height:
+                ver_array[v][i : i + width*l + 1: width] = np.pi / 2
+                v += 1
 
     for n in range(num_images):
         rng = algorithm_globals.random.integers(0, 2)
