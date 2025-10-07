@@ -115,4 +115,4 @@ for iev in range(len(px_reco)):
             plt.savefig(outpath, dpi=150)
             plt.close()
 
-print("✅ Done! b-jet 4×4 images saved in:", OUTPUT_DIR)
+print("Done! b-jet 4×4 images saved in:", OUTPUT_DIR)
