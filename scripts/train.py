@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--log", type=str, default="train.log", help="log file path")
     parser.add_argument("--min-l", type=int, default=2, help="min line length")
     parser.add_argument("--max-l", type=int, default=2, help="max line length")
+    parser.add_argument("--outdir", type=str, default="runs", help="parent folder for runs")
     args = parser.parse_args()
 
     # make a new run folder every time
