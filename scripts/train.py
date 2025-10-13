@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--min-l", type=int, default=2, help="min line length")
     parser.add_argument("--max-l", type=int, default=2, help="max line length")
     parser.add_argument("--outdir", type=str, default="runs", help="parent folder for runs")
+    parser.add_argument("--n-samples", type=int, default=200, help="dataset size")
     args = parser.parse_args()
 
     # make a new run folder every time
@@ -33,7 +34,7 @@ def main():
     circuit, qnn = qcnn(width * height)
 
     # generate dataset
-    images, labels = generate_line_dataset(100, width=width, height=height, min_l=args.min_l, max_l=args.max_l)
+    images, labels = generate_line_dataset(args.n_samples, width=width, height=height, min_l=args.min_l, max_l=args.max_l)
     train_images, test_images, train_labels, test_labels = train_test_split(
         images, labels, test_size=0.3, random_state=246
     )
