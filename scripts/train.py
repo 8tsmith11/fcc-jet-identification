@@ -32,6 +32,7 @@ def main():
 
     # output logging
     log_path = Path(args.log)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
     log_f = log_path.open("a", encoding="utf-8")
 
     objective_func_vals = []
@@ -62,9 +63,29 @@ def main():
 
     acc = np.round(100 * classifier.score(x, y), 2)
     log_line(f"Accuracy from the train data : {acc}%")
+    
+    # Save classifier in the same folder as the log and the plot
+    model_out = log_path.parent / "classifier.model"
     try:
-        classifier.save("classifier.model")
-        log_line("Saved classifier to classifier.model")
+        classifier.save(str(model_out))
+        log_line(f"Saved classifier to {model_out}")
+    except Exception as e:
+        log_line(f"[warn] Could not save classifier: {e}")
+
+    # Save the objective curve plot to PNG in the same folder
+    try:
+        if len(objective_func_vals):
+            fig_out = log_path.parent / "objective_curve.png"
+            plt.figure()
+            plt.title("Objective function value against iteration")
+            plt.xlabel("Iteration")
+            plt.ylabel("Objective function value")
+            plt.plot(range(len(objective_func_vals)), objective_func_vals)
+            plt.tight_layout()
+            plt.savefig(fig_out)
+            log_line(f"Saved objective curve to {fig_out}")
+        else:
+            log_line("No objective values recorded; plot not created.")
     finally:
         log_f.close()
 
