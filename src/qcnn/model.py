@@ -12,7 +12,7 @@ def qcnn(size, estimator=None):
 
     ansatz = QuantumCircuit(size, name="Ansatz")
 
-    for layer in range(int(math.log2(size))):
+    for layer in range(math.ceil(math.log2(size))):
         n = size // (2 ** layer) # num qubits in this layer
         if n < 2:
             break
@@ -20,7 +20,7 @@ def qcnn(size, estimator=None):
         first = size - n # first qubit in this layer
 
         ansatz.compose(conv_layer(n, f"c{layer+1}"), list(range(first, size)), inplace=True)
-        ansatz.compose(pool_layer(list(range(0, n // 2)), list(range(n // 2, n)), f"p{layer+1}"), list(range(first, size)), inplace=True)
+        ansatz.compose(pool_layer(list(range(0, n, 2)), list(range(1, n, 2)), f"p{layer+1}"), list(range(first, size)), inplace=True)
 
     # Combining the feature map and ansatz
     circuit = QuantumCircuit(size)

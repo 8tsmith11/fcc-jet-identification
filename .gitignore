@@ -39,3 +39,6 @@ Thumbs.db
 .env
 .env.*
 *.env
+
+# Trained model
+./notebooks/classifier.model

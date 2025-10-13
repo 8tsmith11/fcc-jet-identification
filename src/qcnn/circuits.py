@@ -50,16 +50,18 @@ def pool_circuit(params):
 
 def pool_layer(sources, sinks, param_prefix):
     num_qubits = len(sources) + len(sinks)
+    num_pairs = min(len(sources), len(sinks))
+
     qc = QuantumCircuit(num_qubits, name="Pooling Layer")
     param_index = 0
-    params = ParameterVector(param_prefix, length=num_qubits // 2 * 3)
+    params = ParameterVector(param_prefix, length=num_pairs * 3)
+
     for source, sink in zip(sources, sinks):
         qc = qc.compose(pool_circuit(params[param_index : (param_index + 3)]), [source, sink])
         qc.barrier()
         param_index += 3
 
     qc_inst = qc.to_instruction()
-
     qc = QuantumCircuit(num_qubits)
     qc.append(qc_inst, range(num_qubits))
     return qc
