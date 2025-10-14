@@ -1,0 +1,55 @@
+Loading classifier from: runs/20251013_231658/classifier.model
+[iter 0001] loss=0.45485993
+[iter 0002] loss=0.45754487
+[iter 0003] loss=0.46097314
+[iter 0004] loss=0.45618155
+[iter 0005] loss=0.45645497
+[iter 0006] loss=0.47466095
+[iter 0007] loss=0.47299931
+[iter 0008] loss=0.46630672
+[iter 0009] loss=0.46708955
+[iter 0010] loss=0.46040594
+[iter 0011] loss=0.45104197
+[iter 0012] loss=0.45508577
+[iter 0013] loss=0.45886418
+[iter 0014] loss=0.45432211
+[iter 0015] loss=0.45307674
+[iter 0016] loss=0.45477091
+[iter 0017] loss=0.45856998
+[iter 0018] loss=0.45860171
+[iter 0019] loss=0.46132225
+[iter 0020] loss=0.46067225
+[iter 0021] loss=0.45735005
+[iter 0022] loss=0.46415862
+[iter 0023] loss=0.45593997
+[iter 0024] loss=0.46477893
+[iter 0025] loss=0.45819239
+[iter 0026] loss=0.46928210
+[iter 0027] loss=0.45689706
+[iter 0028] loss=0.45057610
+[iter 0029] loss=0.46256935
+[iter 0030] loss=0.45412598
+[iter 0031] loss=0.46175878
+[iter 0032] loss=0.45402403
+[iter 0033] loss=0.45571401
+[iter 0034] loss=0.46026204
+[iter 0035] loss=0.45066133
+[iter 0036] loss=0.45367785
+[iter 0037] loss=0.45456689
+[iter 0038] loss=0.45425933
+[iter 0039] loss=0.46108881
+[iter 0040] loss=0.45914798
+[iter 0041] loss=0.45242521
+[iter 0042] loss=0.46449124
+[iter 0043] loss=0.45840152
+[iter 0044] loss=0.45226494
+[iter 0045] loss=0.45559693
+[iter 0046] loss=0.45372433
+[iter 0047] loss=0.45299373
+[iter 0048] loss=0.45063211
+[iter 0049] loss=0.45488659
+[iter 0050] loss=0.45708550
+Accuracy from the train data : 97.14%
+Accuracy from the test data : 96.67%
+Saved classifier to runs/20251013_231658/classifier.model
+Saved objective curve to runs/20251013_233248/objective_curve.png

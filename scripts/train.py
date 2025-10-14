@@ -23,15 +23,22 @@ def main():
     parser.add_argument("--max-l", type=int, default=2, help="max line length")
     parser.add_argument("--outdir", type=str, default="runs", help="parent folder for runs")
     parser.add_argument("--n-samples", type=int, default=200, help="dataset size")
+    parser.add_argument("--model", type=str, default=None, help="path to an existing classifier.model to resume training from")
+    parser.add_argument("--rhobeg", type=float, default=1.0, help="COBYLA initial trust region")
     args = parser.parse_args()
 
     # make a new run folder every time
     run_dir = Path(args.outdir) / datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir.mkdir(parents=True, exist_ok=True)
 
+    # saved model file path
+    model_path = Path(args.model) if args.model else None
+    if model_path and not model_path.is_file():
+        raise FileNotFoundError(f"Model file not found: {model_path}")
+
     # build QCNN 
     width, height = args.width, args.height
-    circuit, qnn = qcnn(width * height)
+    _, qnn = qcnn(width * height)
 
     # generate dataset
     images, labels = generate_line_dataset(args.n_samples, width=width, height=height, min_l=args.min_l, max_l=args.max_l)
@@ -56,24 +63,42 @@ def main():
         log_line(f"[iter {it:04d}] loss={float(obj_func_eval):.8f}")    
 
     # Classifier
-    classifier = NeuralNetworkClassifier(
-        qnn,
-        optimizer=COBYLA(maxiter=100),
-        callback=callback_graph,
-        warm_start=True,
-    )
+    if model_path:
+        log_line(f"Loading classifier from: {model_path}")
+        classifier = NeuralNetworkClassifier.load(str(model_path))
+        classifier.warm_start = True
+        classifier.optimizer.set_options(maxiter=args.maxiter, rhobeg=args.rhobeg)
+        try:
+            classifier.callback = callback_graph
+        except Exception:
+            log_line("[warn] Could not set callback on loaded classifier; continuing.")
+    else:
+        classifier = NeuralNetworkClassifier(
+            qnn,
+            optimizer=COBYLA(maxiter=args.maxiter),
+            callback=callback_graph,
+            warm_start=True,
+            rhobeg=args.rhobeg,
+        )
 
+    # Training data accuracy
     x = np.asarray(train_images)
     y = np.asarray(train_labels)
-    plt.rcParams["figure.figsize"] = (12, 6)
-    classifier.optimizer = COBYLA(maxiter=args.maxiter)
     classifier.fit(x, y)
 
     acc = np.round(100 * classifier.score(x, y), 2)
     log_line(f"Accuracy from the train data : {acc}%")
+
+    # Test Dataset
+    x_test = np.asarray(test_images, dtype=float)
+    y_test = np.asarray(test_labels, dtype=int)
+    y_pred = classifier.predict(x_test)
+    test_acc = np.round(100 * classifier.score(x_test, y_test), 2)
+    log_line(f"Accuracy from the test data : {test_acc}%")
     
     # Save classifier in the run folder
-    model_out = run_dir / "classifier.model"
+    model_out = model_path if model_path else (run_dir / "classifier.model")
+
     try:
         classifier.save(str(model_out))
         log_line(f"Saved classifier to {model_out}")
