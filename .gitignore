@@ -42,3 +42,7 @@ Thumbs.db
 
 # Trained model
 ./notebooks/classifier.model
+
+# Data / Output
+data/
+runs/
